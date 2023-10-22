@@ -1,0 +1,7 @@
+### Example file - insert your data to run locally
+
+###############################################
+### EMBEDDED TOMCAT CONFIGURATIONS ###
+###############################################
+server.port=${PORT:8081}
+
