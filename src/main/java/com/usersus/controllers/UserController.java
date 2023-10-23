@@ -1,5 +1,7 @@
 package com.usersus.controllers;
 
+import com.usersus.dtos.JwtRequestDto;
+import com.usersus.dtos.JwtResponseDto;
 import com.usersus.dtos.UserDto;
 import com.usersus.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -20,5 +22,11 @@ public class UserController {
     public ResponseEntity<UUID> registerUser(@RequestBody @Valid UserDto userDto) {
         return new ResponseEntity<>(userService.register(userDto, false),
                 HttpStatus.CREATED);
+    }
+
+    @PostMapping("/authenticate")
+    @CrossOrigin
+    public ResponseEntity<JwtResponseDto> authenticate(@Valid @RequestBody JwtRequestDto jwtRequest) throws Exception {
+        return new ResponseEntity<>(userService.authenticate(jwtRequest), HttpStatus.OK);
     }
 }
