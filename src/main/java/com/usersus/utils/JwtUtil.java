@@ -7,6 +7,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,9 @@ import java.security.Key;
 import java.security.KeyFactory;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * JWT Utility Methods
@@ -61,7 +64,11 @@ public class JwtUtil {
 
     public String generateToken(UserDetails userDetails) {
         return Jwts.builder()
-                .setClaims(new HashMap<>())
+                .setClaims(Map
+                        .of("role", userDetails.getAuthorities()
+                                .stream()
+                                .map(GrantedAuthority::getAuthority).toList()
+                                .get(0)))
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY_mS))
