@@ -24,8 +24,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
-import static com.usersus.constants.SecurityConstants.ADMIN_AUTH_REQUIRED_PATTERNS;
-import static com.usersus.constants.SecurityConstants.NO_AUTH_REQUIRED_PATTERNS;
+import static com.usersus.constants.SecurityConstants.*;
 
 @Configuration
 @EnableWebSecurity
@@ -68,6 +67,8 @@ public class SecurityConfiguration {
                         .permitAll()
                         .requestMatchers(ADMIN_AUTH_REQUIRED_PATTERNS)
                         .hasAnyAuthority(String.valueOf(UserRole.ADMIN))
+                        .requestMatchers(USER_AUTH_REQUIRED_PATTERNS)
+                        .hasAnyAuthority(String.valueOf(UserRole.ADMIN), String.valueOf(UserRole.USER))
                 )
                 .sessionManagement(management ->
                         management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

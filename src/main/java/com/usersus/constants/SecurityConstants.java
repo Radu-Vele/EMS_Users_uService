@@ -7,6 +7,14 @@ public class SecurityConstants {
     };
 
     public static final String[] ADMIN_AUTH_REQUIRED_PATTERNS = {
-            "/users/registerUser"
+            "/users/registerUser",
+            "/users/getUserDetailsByEmail"
     };
+
+    public static final String[] USER_AUTH_REQUIRED_PATTERNS = {
+            "/users/listAllDevices",
+            "/users/getSelfDetails"
+    };
+
+
 }

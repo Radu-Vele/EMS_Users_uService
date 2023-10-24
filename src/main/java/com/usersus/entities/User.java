@@ -21,26 +21,32 @@ public class User implements UserDetails {
     @GeneratedValue(strategy= GenerationType.UUID)
     @Column(columnDefinition = "BINARY(32)")
     private UUID id;
+
     @Getter
     @Setter
     @Column(nullable = false)
     private String lastName;
+
     @Getter
     @Setter
     @Column(nullable = false)
     private String firstName;
+
     @Getter
     @Setter
     @Column(nullable = false, unique = true)
     private String emailAddress;
+
     @Getter
     @Setter
     @Column(nullable = false)
     private String password;
+
     @Getter
     @Setter
     @ElementCollection
     private List<UUID> devices;
+
     @Getter
     @Setter
     @Column(nullable = false)
