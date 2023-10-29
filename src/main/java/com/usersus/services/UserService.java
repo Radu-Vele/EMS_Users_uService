@@ -18,8 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
 
 import static com.usersus.constants.ExceptionsConstants.USER_ALREADY_REGISTERED_MESSAGE;
 
@@ -63,5 +62,32 @@ public class UserService {
         User user = this.userRepository.findByEmailAddress(emailAddress)
                 .orElseThrow();
         return mapper.map(user, UserDetailsDto.class);
+    }
+
+    public Void deleteUserByEmail(String emailAddress) {
+        User user = this.userRepository.findByEmailAddress(emailAddress)
+                .orElseThrow();
+        this.userRepository.deleteById(user.getId());
+        return null;
+    }
+
+    public List<UserDetailsDto> getAllUsersDetails() {
+        List<User> foundUsers = this.userRepository.findAll();
+        return foundUsers.stream()
+                .map(user -> mapper.map(user, UserDetailsDto.class))
+                .toList();
+    }
+
+    public UUID editUser(UserDetailsDto userDetailsDto) throws NoSuchElementException {
+        User currentUser = this.userRepository.findByEmailAddress(userDetailsDto.getEmailAddress())
+                .orElseThrow(() ->
+                        new NoSuchElementException("User not found with email: " + userDetailsDto.getEmailAddress()));
+
+        currentUser.setFirstName(userDetailsDto.getFirstName()); // TODO: fix (prettify, what if new fields are added?)
+        currentUser.setLastName(userDetailsDto.getLastName());
+        currentUser.setRole(UserRole
+                .valueOf(userDetailsDto
+                        .getRole().toUpperCase(Locale.ROOT)));
+        return currentUser.getId();
     }
 }

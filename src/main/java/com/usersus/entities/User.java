@@ -19,7 +19,7 @@ public class User implements UserDetails {
     @Setter
     @Id
     @GeneratedValue(strategy= GenerationType.UUID)
-    @Column(columnDefinition = "BINARY(32)")
+    @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
     @Getter
@@ -80,5 +80,18 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", lastName='" + lastName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", emailAddress='" + emailAddress + '\'' +
+                ", password='" + password + '\'' +
+                ", devices=" + devices +
+                ", role=" + role +
+                '}';
     }
 }

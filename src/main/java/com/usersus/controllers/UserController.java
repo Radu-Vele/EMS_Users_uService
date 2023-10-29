@@ -15,9 +15,11 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
+@CrossOrigin
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
@@ -49,9 +51,23 @@ public class UserController {
     }
 
     @PostMapping("/authenticate")
-    @CrossOrigin
     public ResponseEntity<JwtResponseDto> authenticate(
             @Valid @RequestBody JwtRequestDto jwtRequest) throws AuthenticationException {
         return new ResponseEntity<>(userService.authenticate(jwtRequest), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deleteByEmailAddress")
+    public ResponseEntity<Void> deleteUserByEmail(@RequestParam String emailAddress) {
+        return new ResponseEntity<>(userService.deleteUserByEmail(emailAddress), HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllUsersDetails")
+    public ResponseEntity<List<UserDetailsDto>> getAllUsersDetails() {
+        return new ResponseEntity<List<UserDetailsDto>>(userService.getAllUsersDetails(), HttpStatus.OK);
+    }
+
+    @PutMapping("/edit")
+    public ResponseEntity<UUID> editUser(@RequestBody UserDetailsDto userDetailsDto) throws NoSuchElementException {
+        return new ResponseEntity<>(userService.editUser(userDetailsDto), HttpStatus.OK);
     }
 }
