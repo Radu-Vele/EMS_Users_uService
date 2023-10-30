@@ -11,44 +11,29 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 public class User implements UserDetails {
-    @Getter
-    @Setter
     @Id
     @GeneratedValue(strategy= GenerationType.UUID)
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
-    @Getter
-    @Setter
     @Column(nullable = false)
     private String lastName;
 
-    @Getter
-    @Setter
     @Column(nullable = false)
     private String firstName;
 
-    @Getter
-    @Setter
     @Column(nullable = false, unique = true)
     private String emailAddress;
 
-    @Getter
-    @Setter
     @Column(nullable = false)
     private String password;
 
-    @Getter
-    @Setter
-    @ElementCollection
-    private List<UUID> devices;
-
-    @Getter
-    @Setter
     @Column(nullable = false)
     private UserRole role;
 
@@ -90,7 +75,6 @@ public class User implements UserDetails {
                 ", firstName='" + firstName + '\'' +
                 ", emailAddress='" + emailAddress + '\'' +
                 ", password='" + password + '\'' +
-                ", devices=" + devices +
                 ", role=" + role +
                 '}';
     }

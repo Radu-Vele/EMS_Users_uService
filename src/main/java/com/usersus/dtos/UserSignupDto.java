@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Data
-public class UserDto {
+public class UserSignupDto {
     private UUID id;
     @NotNull
     private String lastName;

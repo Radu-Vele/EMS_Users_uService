@@ -3,7 +3,7 @@ package com.usersus.controllers;
 import com.usersus.dtos.JwtRequestDto;
 import com.usersus.dtos.JwtResponseDto;
 import com.usersus.dtos.UserDetailsDto;
-import com.usersus.dtos.UserDto;
+import com.usersus.dtos.UserSignupDto;
 import com.usersus.exceptions.UserAlreadyRegisteredException;
 import com.usersus.services.UserService;
 import com.usersus.utils.JwtUtil;
@@ -29,7 +29,7 @@ public class UserController {
 
     @PostMapping("/registerUser")
     public ResponseEntity<UUID> registerUser(
-            @RequestBody @Valid UserDto userDto) throws UserAlreadyRegisteredException {
+            @RequestBody @Valid UserSignupDto userDto) throws UserAlreadyRegisteredException {
         return new ResponseEntity<>(userService.register(userDto, false),
                 HttpStatus.CREATED);
     }
