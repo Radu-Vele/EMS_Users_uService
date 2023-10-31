@@ -11,6 +11,7 @@ import com.usersus.repositories.UserRepository;
 import com.usersus.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -22,7 +23,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.util.*;
 
 import static com.usersus.constants.ExceptionsConstants.USER_ALREADY_REGISTERED_MESSAGE;
-import static com.usersus.constants.NetworkConstants.DEVICES_MICROSERVICE_URL;
 
 @Service
 @Transactional
@@ -34,6 +34,10 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
     private final WebClient.Builder webClientBuilder;
+    @Value("${devices.ip}")
+    public String DEVICES_IP;
+    @Value("${devices.port}")
+    public int DEVICES_PORT;
 
     public UUID register(UserSignupDto userDto, boolean isAdmin) throws UserAlreadyRegisteredException {
         if (userRepository.findByEmailAddress(userDto.getEmailAddress()).isPresent()) {
@@ -50,17 +54,19 @@ public class UserService {
     }
 
     public void registerUserInDevicesUs(UUID id) {
-        WebClient webClient = webClientBuilder.baseUrl(DEVICES_MICROSERVICE_URL)
+        String baseUrl = "http://" + DEVICES_IP + ":" + DEVICES_PORT;
+        System.out.println("Base url: " + baseUrl);
+        WebClient webClient = webClientBuilder.baseUrl(baseUrl)
                 .build();
         webClient.post()
                 .uri("/users/registerUserId?id=" + id)
                 .retrieve()
                 .bodyToMono(String.class)
-                .block(); //todo check if I can do it better
+                .block();
     }
 
     public void deleteUserFromDevicesUs(UUID id) {
-        WebClient webClient = webClientBuilder.baseUrl(DEVICES_MICROSERVICE_URL)
+        WebClient webClient = webClientBuilder.baseUrl("http://" + DEVICES_IP + ":" + DEVICES_PORT)
                 .build();
         webClient.delete()
                 .uri("/users/removeUserAndMapping?id=" + id)
