@@ -1,0 +1,78 @@
+version: '3'
+services:
+    devices_uService:
+        image: energy-ms-devices-us-image
+        restart: always
+        ports:
+            - "8082:8080"
+        networks:
+            energy-ms-net:
+                ipv4_address: 172.20.0.2
+        environment:
+            - TZ=UTC
+            - DB_IP=devices_db
+            - DB_PORT=3306
+            - DB_USER=root
+            - DB_PASSWORD=root
+            - DB_DBNAME=energy-ms-devices
+            - PORT=8080
+        depends_on:
+            - devices_db
+        expose:
+            - 8080
+    users_uService:
+        image: energy-ms-users-us-image
+        ports:
+            - "8081:8080"
+        networks:
+            energy-ms-net:
+                ipv4_address: 172.20.0.3
+        environment:
+            - TZ=UTC
+            - DB_IP=users_db
+            - DB_PORT=3306
+            - DB_USER=root
+            - DB_PASSWORD=root
+            - DB_DBNAME=energy-ms-users
+            - DEVICES_IP=172.20.0.2
+            - DEVICES_PORT=8080
+            - PORT=8080
+        depends_on:
+            - users_db
+            - devices_uService
+        expose:
+            - 8080
+    users_db:
+        image: mysql
+        ports:
+            - "3307:3306"
+        networks:
+            energy-ms-net:
+                ipv4_address: 172.20.0.4
+        environment:
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_DATABASE=energy-ms-users
+    devices_db:
+        image: mysql
+        ports:
+            - "3308:3306"
+        networks:
+            energy-ms-net:
+                ipv4_address: 172.20.0.5
+        environment:
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_DATABASE=energy-ms-devices
+    frontend_app:
+        image: energy-ms-frontend
+        ports:
+            - "80:80"
+        networks:
+            energy-ms-net:
+                ipv4_address: 172.20.0.6
+
+networks:
+    energy-ms-net:
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 172.20.0.0/16
