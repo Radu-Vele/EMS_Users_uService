@@ -34,6 +34,23 @@ public class UserController {
                 HttpStatus.CREATED);
     }
 
+    @GetMapping("/getSelfId")
+    public ResponseEntity<UUID> getSelfId(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth) {
+        return new ResponseEntity<>(userService.getSelfId(jwtUtil.getUsernameFromToken(auth.substring(7))), HttpStatus.OK);
+    }
+
+    @GetMapping("/getIdByEmail")
+    public ResponseEntity<UUID> getIdByEmail(@RequestParam String emailAddress) {
+        return new ResponseEntity<>(userService.getSelfId(emailAddress), HttpStatus.OK);
+    }
+
+    @PostMapping("/registerAdmin")
+    public ResponseEntity<UUID> registerAdmin(
+            @RequestBody @Valid UserSignupDto userDto) throws UserAlreadyRegisteredException {
+        return new ResponseEntity<>(userService.register(userDto, true),
+                HttpStatus.CREATED);
+    }
+
     @GetMapping("/getUserDetailsByEmail")
     public ResponseEntity<UserDetailsDto> getUserByEmail(
             @RequestParam String emailAddress) throws NoSuchElementException {
@@ -63,7 +80,7 @@ public class UserController {
 
     @GetMapping("/getAllUsersDetails")
     public ResponseEntity<List<UserDetailsDto>> getAllUsersDetails() {
-        return new ResponseEntity<List<UserDetailsDto>>(userService.getAllUsersDetails(), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getAllUsersDetails(), HttpStatus.OK);
     }
 
     @PutMapping("/edit")

@@ -117,4 +117,11 @@ public class UserService {
         // TODO: add edit email + password
         return currentUser.getId();
     }
+
+    public UUID getSelfId(String email) {
+        User currentUser = this.userRepository.findByEmailAddress(email)
+                .orElseThrow(() ->
+                        new NoSuchElementException("User not found with email: " + email));
+        return currentUser.getId();
+    }
 }
