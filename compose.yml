@@ -16,6 +16,12 @@ services:
             - DB_PASSWORD=root
             - DB_DBNAME=energy-ms-devices
             - PORT=8080
+            - RABBITMQ_HOST=sparrow.rmq.cloudamqp.com
+            - RABBITMQ_PORT=5671
+            - RABBITMQ_USER=oguejmtp
+            - RABBITMQ_PASS=QLW7IJPo4Pi2cfntM9lYMJXLSiDyg-wV
+            - RABBITMQ_MEASUREMENTS_QUEUE=devices_energy_consumption
+            - RABBITMQ_DEVICES_CHANGE_QUEUE=devices_change_queue
         depends_on:
             - devices_db
         expose:
@@ -69,6 +75,39 @@ services:
         networks:
             energy-ms-net:
                 ipv4_address: 172.20.0.6
+    measurements_uservice:
+        image: energy-ms-measurements-us
+        ports:
+            - "8083:8080"
+        environment:
+            - TZ=UTC
+            - DB_IP=measurements_db
+            - DB_PORT=3306
+            - DB_USER=root
+            - DB_PASSWORD=root
+            - DB_DBNAME=energy-ms-measurements
+            - PORT=8080
+            - RABBITMQ_HOST=sparrow.rmq.cloudamqp.com
+            - RABBITMQ_PORT=5671
+            - RABBITMQ_USER=oguejmtp
+            - RABBITMQ_PASS=QLW7IJPo4Pi2cfntM9lYMJXLSiDyg-wV
+            - RABBITMQ_MEASUREMENTS_QUEUE=devices_energy_consumption
+            - RABBITMQ_DEVICES_CHANGE_QUEUE=devices_change_queue
+        depends_on:
+            - measurements_db
+        networks:
+            energy-ms-net:
+                ipv4_address: 172.20.0.7
+    measurements_db:
+        image: mysql
+        ports:
+            - "3309:3306"
+        networks:
+            energy-ms-net:
+                ipv4_address: 172.20.0.8
+        environment:
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_DATABASE=energy-ms-measurements
 
 networks:
     energy-ms-net:
