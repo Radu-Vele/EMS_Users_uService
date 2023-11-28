@@ -20,7 +20,7 @@ services:
             - RABBITMQ_PORT=5671
             - RABBITMQ_USER=your-user
             - RABBITMQ_PASS=your-pass
-            - RABBITMQ_MEASUREMENTS_QUEUE=devices_energy_consumption
+            - RABBITMQ_MEASUREMENTS_QUEUE=devicgit es_energy_consumption
             - RABBITMQ_DEVICES_CHANGE_QUEUE=devices_change_queue
         depends_on:
             - devices_db
