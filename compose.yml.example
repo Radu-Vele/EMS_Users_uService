@@ -12,14 +12,14 @@ services:
             - TZ=UTC
             - DB_IP=devices_db
             - DB_PORT=3306
-            - DB_USER=root
-            - DB_PASSWORD=root
+            - DB_USER=your-credential
+            - DB_PASSWORD=your-credential
             - DB_DBNAME=energy-ms-devices
             - PORT=8080
-            - RABBITMQ_HOST=sparrow.rmq.cloudamqp.com
+            - RABBITMQ_HOST=your-hostname
             - RABBITMQ_PORT=5671
-            - RABBITMQ_USER=oguejmtp
-            - RABBITMQ_PASS=QLW7IJPo4Pi2cfntM9lYMJXLSiDyg-wV
+            - RABBITMQ_USER=your-user
+            - RABBITMQ_PASS=your-pass
             - RABBITMQ_MEASUREMENTS_QUEUE=devices_energy_consumption
             - RABBITMQ_DEVICES_CHANGE_QUEUE=devices_change_queue
         depends_on:
@@ -37,8 +37,8 @@ services:
             - TZ=UTC
             - DB_IP=users_db
             - DB_PORT=3306
-            - DB_USER=root
-            - DB_PASSWORD=root
+            - DB_USER=your-credential
+            - DB_PASSWORD=your-credential
             - DB_DBNAME=energy-ms-users
             - DEVICES_IP=172.20.0.2
             - DEVICES_PORT=8080
@@ -56,7 +56,7 @@ services:
             energy-ms-net:
                 ipv4_address: 172.20.0.4
         environment:
-            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_your-credential_PASSWORD=your-credential
             - MYSQL_DATABASE=energy-ms-users
     devices_db:
         image: mysql
@@ -66,7 +66,7 @@ services:
             energy-ms-net:
                 ipv4_address: 172.20.0.5
         environment:
-            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_your-credential_PASSWORD=your-credential
             - MYSQL_DATABASE=energy-ms-devices
     frontend_app:
         image: energy-ms-frontend
@@ -83,14 +83,14 @@ services:
             - TZ=UTC
             - DB_IP=measurements_db
             - DB_PORT=3306
-            - DB_USER=root
-            - DB_PASSWORD=root
+            - DB_USER=your-credential
+            - DB_PASSWORD=your-credential
             - DB_DBNAME=energy-ms-measurements
             - PORT=8080
-            - RABBITMQ_HOST=sparrow.rmq.cloudamqp.com
+            - RABBITMQ_HOST=your-hostname
             - RABBITMQ_PORT=5671
-            - RABBITMQ_USER=oguejmtp
-            - RABBITMQ_PASS=QLW7IJPo4Pi2cfntM9lYMJXLSiDyg-wV
+            - RABBITMQ_USER=your-user
+            - RABBITMQ_PASS=your-pass
             - RABBITMQ_MEASUREMENTS_QUEUE=devices_energy_consumption
             - RABBITMQ_DEVICES_CHANGE_QUEUE=devices_change_queue
         depends_on:
@@ -106,7 +106,7 @@ services:
             energy-ms-net:
                 ipv4_address: 172.20.0.8
         environment:
-            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_your-credential_PASSWORD=your-credential
             - MYSQL_DATABASE=energy-ms-measurements
 
 networks:
