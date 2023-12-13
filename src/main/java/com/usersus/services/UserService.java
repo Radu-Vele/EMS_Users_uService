@@ -58,18 +58,20 @@ public class UserService {
         System.out.println("Base url: " + baseUrl);
         WebClient webClient = webClientBuilder.baseUrl(baseUrl)
                 .build();
-        webClient.post()
+        webClient
+                .post()
                 .uri("/users/registerUserId?id=" + id)
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
     }
 
-    public void deleteUserFromDevicesUs(UUID id) {
+    public void deleteUserFromDevicesUs(UUID id, String token) {
         WebClient webClient = webClientBuilder.baseUrl("http://" + DEVICES_IP + ":" + DEVICES_PORT)
                 .build();
         webClient.delete()
                 .uri("/users/removeUserAndMapping?id=" + id)
+                .header("Authorization", "Bearer ".concat(token))
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
@@ -95,11 +97,11 @@ public class UserService {
         return mapper.map(user, UserDetailsDto.class);
     }
 
-    public Void deleteUserByEmail(String emailAddress) {
+    public Void deleteUserByEmail(String emailAddress, String token) {
         User user = this.userRepository.findByEmailAddress(emailAddress)
                 .orElseThrow();
         this.userRepository.deleteById(user.getId());
-        this.deleteUserFromDevicesUs(user.getId());
+        this.deleteUserFromDevicesUs(user.getId(), token);
         return null;
     }
 

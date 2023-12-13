@@ -45,8 +45,7 @@ public class UserController {
     }
 
     @PostMapping("/registerAdmin")
-    public ResponseEntity<UUID> registerAdmin(
-            @RequestBody @Valid UserSignupDto userDto) throws UserAlreadyRegisteredException {
+    public ResponseEntity<UUID> registerAdmin(@RequestBody @Valid UserSignupDto userDto) throws UserAlreadyRegisteredException {
         return new ResponseEntity<>(userService.register(userDto, true),
                 HttpStatus.CREATED);
     }
@@ -74,8 +73,9 @@ public class UserController {
     }
 
     @DeleteMapping("/deleteByEmailAddress")
-    public ResponseEntity<Void> deleteUserByEmail(@RequestParam String emailAddress) {
-        return new ResponseEntity<>(userService.deleteUserByEmail(emailAddress), HttpStatus.OK);
+    public ResponseEntity<Void> deleteUserByEmail(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth, @RequestParam String emailAddress) {
+        String token = auth.substring(7);
+        return new ResponseEntity<>(userService.deleteUserByEmail(emailAddress, token), HttpStatus.OK);
     }
 
     @GetMapping("/getAllUsersDetails")
