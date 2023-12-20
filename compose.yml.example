@@ -108,6 +108,15 @@ services:
         environment:
             - MYSQL_your-credential_PASSWORD=your-credential
             - MYSQL_DATABASE=energy-ms-measurements
+    chat_uService:
+        image: energy-ms-chat-us
+        ports:
+            - "8084:8080"
+        networks:
+            energy-ms-net:
+                ipv4_address: 172.20.0.9
+        environment:
+            - PORT=8080
 
 networks:
     energy-ms-net:
